@@ -1,6 +1,5 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
-import { Any } from "../google/protobuf/any";
 import Long = require("long");
 
 export const protobufPackage = "event";
@@ -49,7 +48,12 @@ export interface GetEventDto {
 
 export interface EmitEventDto {
   name: string;
-  payload: Any | undefined;
+  userRegister?: EmitEventDto_UserRegister | undefined;
+}
+
+export interface EmitEventDto_UserRegister {
+  email: string;
+  otp: string;
 }
 
 export interface EmitEventResult {
@@ -278,7 +282,7 @@ export const GetEventDto = {
 };
 
 function createBaseEmitEventDto(): EmitEventDto {
-  return { name: "", payload: undefined };
+  return { name: "", userRegister: undefined };
 }
 
 export const EmitEventDto = {
@@ -286,8 +290,8 @@ export const EmitEventDto = {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.payload !== undefined) {
-      Any.encode(message.payload, writer.uint32(18).fork()).ldelim();
+    if (message.userRegister !== undefined) {
+      EmitEventDto_UserRegister.encode(message.userRegister, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -311,7 +315,7 @@ export const EmitEventDto = {
             break;
           }
 
-          message.payload = Any.decode(reader, reader.uint32());
+          message.userRegister = EmitEventDto_UserRegister.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -325,7 +329,7 @@ export const EmitEventDto = {
   fromJSON(object: any): EmitEventDto {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
+      userRegister: isSet(object.userRegister) ? EmitEventDto_UserRegister.fromJSON(object.userRegister) : undefined,
     };
   },
 
@@ -334,8 +338,8 @@ export const EmitEventDto = {
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (message.payload !== undefined) {
-      obj.payload = Any.toJSON(message.payload);
+    if (message.userRegister !== undefined) {
+      obj.userRegister = EmitEventDto_UserRegister.toJSON(message.userRegister);
     }
     return obj;
   },
@@ -346,9 +350,83 @@ export const EmitEventDto = {
   fromPartial<I extends Exact<DeepPartial<EmitEventDto>, I>>(object: I): EmitEventDto {
     const message = createBaseEmitEventDto();
     message.name = object.name ?? "";
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Any.fromPartial(object.payload)
+    message.userRegister = (object.userRegister !== undefined && object.userRegister !== null)
+      ? EmitEventDto_UserRegister.fromPartial(object.userRegister)
       : undefined;
+    return message;
+  },
+};
+
+function createBaseEmitEventDto_UserRegister(): EmitEventDto_UserRegister {
+  return { email: "", otp: "" };
+}
+
+export const EmitEventDto_UserRegister = {
+  encode(message: EmitEventDto_UserRegister, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.email !== "") {
+      writer.uint32(10).string(message.email);
+    }
+    if (message.otp !== "") {
+      writer.uint32(18).string(message.otp);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EmitEventDto_UserRegister {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEmitEventDto_UserRegister();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.otp = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EmitEventDto_UserRegister {
+    return {
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      otp: isSet(object.otp) ? globalThis.String(object.otp) : "",
+    };
+  },
+
+  toJSON(message: EmitEventDto_UserRegister): unknown {
+    const obj: any = {};
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    if (message.otp !== "") {
+      obj.otp = message.otp;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<EmitEventDto_UserRegister>, I>>(base?: I): EmitEventDto_UserRegister {
+    return EmitEventDto_UserRegister.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<EmitEventDto_UserRegister>, I>>(object: I): EmitEventDto_UserRegister {
+    const message = createBaseEmitEventDto_UserRegister();
+    message.email = object.email ?? "";
+    message.otp = object.otp ?? "";
     return message;
   },
 };

@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package event;
-
-message UserRegisterDto {
-  string email = 1;
-  string otpCode = 2;
-}

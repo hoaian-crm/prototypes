@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/any.proto";
-
 package event;
 
 message IEvent {
@@ -31,7 +29,14 @@ enum Events {
 
 message EmitEventDto {
   string name = 1;
-  google.protobuf.Any payload = 2;
+  oneof payload {
+    UserRegister user_register = 2;
+  }
+
+  message UserRegister {
+    string email = 1;
+    string otp = 2;
+  }
 }
 
 message EmitEventResult {
