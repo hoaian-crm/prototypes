@@ -15,10 +15,8 @@ export interface CreateEventDto {
   description?: string | undefined;
 }
 
-export interface FindEventDto {
-}
-
 export interface GetEventDto {
+  name: string;
 }
 
 function createBaseIEvent(): IEvent {
@@ -184,55 +182,15 @@ export const CreateEventDto = {
   },
 };
 
-function createBaseFindEventDto(): FindEventDto {
-  return {};
-}
-
-export const FindEventDto = {
-  encode(_: FindEventDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): FindEventDto {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFindEventDto();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(_: any): FindEventDto {
-    return {};
-  },
-
-  toJSON(_: FindEventDto): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FindEventDto>, I>>(base?: I): FindEventDto {
-    return FindEventDto.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FindEventDto>, I>>(_: I): FindEventDto {
-    const message = createBaseFindEventDto();
-    return message;
-  },
-};
-
 function createBaseGetEventDto(): GetEventDto {
-  return {};
+  return { name: "" };
 }
 
 export const GetEventDto = {
-  encode(_: GetEventDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetEventDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
     return writer;
   },
 
@@ -243,6 +201,13 @@ export const GetEventDto = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -252,20 +217,24 @@ export const GetEventDto = {
     return message;
   },
 
-  fromJSON(_: any): GetEventDto {
-    return {};
+  fromJSON(object: any): GetEventDto {
+    return { name: isSet(object.name) ? globalThis.String(object.name) : "" };
   },
 
-  toJSON(_: GetEventDto): unknown {
+  toJSON(message: GetEventDto): unknown {
     const obj: any = {};
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<GetEventDto>, I>>(base?: I): GetEventDto {
     return GetEventDto.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetEventDto>, I>>(_: I): GetEventDto {
+  fromPartial<I extends Exact<DeepPartial<GetEventDto>, I>>(object: I): GetEventDto {
     const message = createBaseGetEventDto();
+    message.name = object.name ?? "";
     return message;
   },
 };

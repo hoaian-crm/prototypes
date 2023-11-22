@@ -17,6 +17,6 @@ message CreateEventDto {
     optional string description = 3;
 }
 
-message FindEventDto {}
-
-message GetEventDto {}
+message GetEventDto {
+  string name = 1;
+}
