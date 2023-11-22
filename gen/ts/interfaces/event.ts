@@ -1,7 +1,5 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
 import Long = require("long");
 
 export const protobufPackage = "event";
@@ -274,7 +272,6 @@ export const GetEventDto = {
 
 export interface IEventController {
   Create(request: CreateEventDto): Promise<IEvent>;
-  Find(request: FindEventDto): Observable<IEvent>;
   Get(request: GetEventDto): Promise<IEvent>;
 }
 
@@ -286,19 +283,12 @@ export class IEventControllerClientImpl implements IEventController {
     this.service = opts?.service || IEventControllerServiceName;
     this.rpc = rpc;
     this.Create = this.Create.bind(this);
-    this.Find = this.Find.bind(this);
     this.Get = this.Get.bind(this);
   }
   Create(request: CreateEventDto): Promise<IEvent> {
     const data = CreateEventDto.encode(request).finish();
     const promise = this.rpc.request(this.service, "Create", data);
     return promise.then((data) => IEvent.decode(_m0.Reader.create(data)));
-  }
-
-  Find(request: FindEventDto): Observable<IEvent> {
-    const data = FindEventDto.encode(request).finish();
-    const result = this.rpc.serverStreamingRequest(this.service, "Find", data);
-    return result.pipe(map((data) => IEvent.decode(_m0.Reader.create(data))));
   }
 
   Get(request: GetEventDto): Promise<IEvent> {
@@ -310,9 +300,6 @@ export class IEventControllerClientImpl implements IEventController {
 
 interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
-  clientStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Promise<Uint8Array>;
-  serverStreamingRequest(service: string, method: string, data: Uint8Array): Observable<Uint8Array>;
-  bidirectionalStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Observable<Uint8Array>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
