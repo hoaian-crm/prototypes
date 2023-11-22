@@ -1,6 +1,8 @@
 syntax = "proto3";
-
 package event;
+
+import "http/response.proto";
+option go_package = "github.com/hoaian-crm/prototypes";
 
 message IEvent {
     int64 id = 1;
@@ -19,3 +21,7 @@ message CreateEventDto {
 }
 
 message FindEventDto{}
+
+extend http.Response.Data {
+  IEvent result = 1;
+}
