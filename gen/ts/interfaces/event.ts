@@ -52,6 +52,11 @@ export interface EmitEventDto {
   payload: Any | undefined;
 }
 
+export interface EmitEventResult {
+  code: number;
+  message: string;
+}
+
 function createBaseIEvent(): IEvent {
   return { id: 0, name: "", description: undefined };
 }
@@ -348,10 +353,84 @@ export const EmitEventDto = {
   },
 };
 
+function createBaseEmitEventResult(): EmitEventResult {
+  return { code: 0, message: "" };
+}
+
+export const EmitEventResult = {
+  encode(message: EmitEventResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.code !== 0) {
+      writer.uint32(8).int32(message.code);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EmitEventResult {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEmitEventResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.code = reader.int32();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EmitEventResult {
+    return {
+      code: isSet(object.code) ? globalThis.Number(object.code) : 0,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: EmitEventResult): unknown {
+    const obj: any = {};
+    if (message.code !== 0) {
+      obj.code = Math.round(message.code);
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<EmitEventResult>, I>>(base?: I): EmitEventResult {
+    return EmitEventResult.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<EmitEventResult>, I>>(object: I): EmitEventResult {
+    const message = createBaseEmitEventResult();
+    message.code = object.code ?? 0;
+    message.message = object.message ?? "";
+    return message;
+  },
+};
+
 export interface IEventController {
   Create(request: CreateEventDto): Promise<IEvent>;
   Get(request: GetEventDto): Promise<IEvent>;
-  Emit(request: EmitEventDto): Promise<Any>;
+  Emit(request: EmitEventDto): Promise<EmitEventResult>;
 }
 
 export const IEventControllerServiceName = "event.IEventController";
@@ -377,10 +456,10 @@ export class IEventControllerClientImpl implements IEventController {
     return promise.then((data) => IEvent.decode(_m0.Reader.create(data)));
   }
 
-  Emit(request: EmitEventDto): Promise<Any> {
+  Emit(request: EmitEventDto): Promise<EmitEventResult> {
     const data = EmitEventDto.encode(request).finish();
     const promise = this.rpc.request(this.service, "Emit", data);
-    return promise.then((data) => Any.decode(_m0.Reader.create(data)));
+    return promise.then((data) => EmitEventResult.decode(_m0.Reader.create(data)));
   }
 }
 
