@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package event;
+
+import "events/event.schema.proto";
+
+service IEventService {
+  rpc Create (CreateEventDto) returns (IEvent);
+  rpc Find (FindEventDto) returns (stream IEvent);
+}
+
+message CreateEventDto {
+    string name = 2;
+    optional string description = 3;
+}
+
+message FindEventDto{}
