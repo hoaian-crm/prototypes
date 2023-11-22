@@ -1,8 +1,6 @@
 syntax = "proto3";
+import "http/query.proto";
 package event;
-
-import "http/response.proto";
-option go_package = "github.com/hoaian-crm/prototypes";
 
 message IEvent {
     int64 id = 1;
@@ -12,7 +10,8 @@ message IEvent {
 
 service IEventService {
   rpc Create (CreateEventDto) returns (IEvent);
-  rpc Find (FindEventDto) returns (http.Response);
+  rpc Find (http.Query) returns (FindEventResult);
+  rpc FindOne (IEvent) returns (IEvent);
 }
 
 message CreateEventDto {
@@ -20,8 +19,7 @@ message CreateEventDto {
     optional string description = 3;
 }
 
-message FindEventDto{}
-
-extend http.Response.Data {
-  IEvent result = 1;
+message FindEventResult {
+  int64 total = 1;
+  repeated IEvent results = 2;
 }

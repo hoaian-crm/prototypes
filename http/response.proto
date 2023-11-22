@@ -8,6 +8,7 @@ message Response {
   Data data = 2;
 
   message Data {
+    google.protobuf.Any result = 1;
     int64 total = 2;
     int64 limit = 3;
     int64 offset = 4;
@@ -19,5 +20,4 @@ message Response {
     string field = 3;
     google.protobuf.Any metadata = 4;
   }
-
 } 
