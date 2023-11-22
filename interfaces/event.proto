@@ -1,4 +1,7 @@
 syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
 package event;
 
 message IEvent {
@@ -10,6 +13,7 @@ message IEvent {
 service IEventController {
   rpc Create (CreateEventDto) returns (IEvent);
   rpc Get (GetEventDto) returns (IEvent);
+  rpc Emit (EmitEventDto) returns (google.protobuf.Any);
 }
 
 message CreateEventDto {
@@ -19,4 +23,13 @@ message CreateEventDto {
 
 message GetEventDto {
   string name = 1;
+}
+
+enum Events {
+  A = 0;
+}
+
+message EmitEventDto {
+  string name = 1;
+  google.protobuf.Any payload = 2;
 }

@@ -1,8 +1,36 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
+import { Any } from "../google/protobuf/any";
 import Long = require("long");
 
 export const protobufPackage = "event";
+
+export enum Events {
+  A = 0,
+  UNRECOGNIZED = -1,
+}
+
+export function eventsFromJSON(object: any): Events {
+  switch (object) {
+    case 0:
+    case "A":
+      return Events.A;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Events.UNRECOGNIZED;
+  }
+}
+
+export function eventsToJSON(object: Events): string {
+  switch (object) {
+    case Events.A:
+      return "A";
+    case Events.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 
 export interface IEvent {
   id: number;
@@ -17,6 +45,11 @@ export interface CreateEventDto {
 
 export interface GetEventDto {
   name: string;
+}
+
+export interface EmitEventDto {
+  name: string;
+  payload: Any | undefined;
 }
 
 function createBaseIEvent(): IEvent {
@@ -239,9 +272,86 @@ export const GetEventDto = {
   },
 };
 
+function createBaseEmitEventDto(): EmitEventDto {
+  return { name: "", payload: undefined };
+}
+
+export const EmitEventDto = {
+  encode(message: EmitEventDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.payload !== undefined) {
+      Any.encode(message.payload, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EmitEventDto {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEmitEventDto();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.payload = Any.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EmitEventDto {
+    return {
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
+    };
+  },
+
+  toJSON(message: EmitEventDto): unknown {
+    const obj: any = {};
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.payload !== undefined) {
+      obj.payload = Any.toJSON(message.payload);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<EmitEventDto>, I>>(base?: I): EmitEventDto {
+    return EmitEventDto.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<EmitEventDto>, I>>(object: I): EmitEventDto {
+    const message = createBaseEmitEventDto();
+    message.name = object.name ?? "";
+    message.payload = (object.payload !== undefined && object.payload !== null)
+      ? Any.fromPartial(object.payload)
+      : undefined;
+    return message;
+  },
+};
+
 export interface IEventController {
   Create(request: CreateEventDto): Promise<IEvent>;
   Get(request: GetEventDto): Promise<IEvent>;
+  Emit(request: EmitEventDto): Promise<Any>;
 }
 
 export const IEventControllerServiceName = "event.IEventController";
@@ -253,6 +363,7 @@ export class IEventControllerClientImpl implements IEventController {
     this.rpc = rpc;
     this.Create = this.Create.bind(this);
     this.Get = this.Get.bind(this);
+    this.Emit = this.Emit.bind(this);
   }
   Create(request: CreateEventDto): Promise<IEvent> {
     const data = CreateEventDto.encode(request).finish();
@@ -264,6 +375,12 @@ export class IEventControllerClientImpl implements IEventController {
     const data = GetEventDto.encode(request).finish();
     const promise = this.rpc.request(this.service, "Get", data);
     return promise.then((data) => IEvent.decode(_m0.Reader.create(data)));
+  }
+
+  Emit(request: EmitEventDto): Promise<Any> {
+    const data = EmitEventDto.encode(request).finish();
+    const promise = this.rpc.request(this.service, "Emit", data);
+    return promise.then((data) => Any.decode(_m0.Reader.create(data)));
   }
 }
 
