@@ -12,7 +12,7 @@ message IEvent {
 
 service IEventService {
   rpc Create (CreateEventDto) returns (IEvent);
-  rpc Find (FindEventDto) returns (stream IEvent);
+  rpc Find (FindEventDto) returns (http.Response);
 }
 
 message CreateEventDto {
