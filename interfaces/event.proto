@@ -1,5 +1,4 @@
 syntax = "proto3";
-import "http/query.proto";
 package event;
 
 message IEvent {
@@ -10,8 +9,8 @@ message IEvent {
 
 service IEventService {
   rpc Create (CreateEventDto) returns (IEvent);
-  rpc Find (http.Query) returns (FindEventResult);
-  rpc FindOne (IEvent) returns (IEvent);
+  rpc Find (FindEventDto) returns (stream IEvent);
+  rpc Get (GetEventDto) returns (IEvent);
 }
 
 message CreateEventDto {
@@ -19,7 +18,6 @@ message CreateEventDto {
     optional string description = 3;
 }
 
-message FindEventResult {
-  int64 total = 1;
-  repeated IEvent results = 2;
-}
+message FindEventDto {}
+
+message GetEventDto {}

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
-import { Query } from "../http/query";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import Long = require("long");
 
 export const protobufPackage = "event";
@@ -16,9 +17,10 @@ export interface CreateEventDto {
   description?: string | undefined;
 }
 
-export interface FindEventResult {
-  total: number;
-  results: IEvent[];
+export interface FindEventDto {
+}
+
+export interface GetEventDto {
 }
 
 function createBaseIEvent(): IEvent {
@@ -184,42 +186,22 @@ export const CreateEventDto = {
   },
 };
 
-function createBaseFindEventResult(): FindEventResult {
-  return { total: 0, results: [] };
+function createBaseFindEventDto(): FindEventDto {
+  return {};
 }
 
-export const FindEventResult = {
-  encode(message: FindEventResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.total !== 0) {
-      writer.uint32(8).int64(message.total);
-    }
-    for (const v of message.results) {
-      IEvent.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
+export const FindEventDto = {
+  encode(_: FindEventDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FindEventResult {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FindEventDto {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFindEventResult();
+    const message = createBaseFindEventDto();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.total = longToNumber(reader.int64() as Long);
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.results.push(IEvent.decode(reader, reader.uint32()));
-          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -229,39 +211,71 @@ export const FindEventResult = {
     return message;
   },
 
-  fromJSON(object: any): FindEventResult {
-    return {
-      total: isSet(object.total) ? globalThis.Number(object.total) : 0,
-      results: globalThis.Array.isArray(object?.results) ? object.results.map((e: any) => IEvent.fromJSON(e)) : [],
-    };
+  fromJSON(_: any): FindEventDto {
+    return {};
   },
 
-  toJSON(message: FindEventResult): unknown {
+  toJSON(_: FindEventDto): unknown {
     const obj: any = {};
-    if (message.total !== 0) {
-      obj.total = Math.round(message.total);
-    }
-    if (message.results?.length) {
-      obj.results = message.results.map((e) => IEvent.toJSON(e));
-    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<FindEventResult>, I>>(base?: I): FindEventResult {
-    return FindEventResult.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<FindEventDto>, I>>(base?: I): FindEventDto {
+    return FindEventDto.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<FindEventResult>, I>>(object: I): FindEventResult {
-    const message = createBaseFindEventResult();
-    message.total = object.total ?? 0;
-    message.results = object.results?.map((e) => IEvent.fromPartial(e)) || [];
+  fromPartial<I extends Exact<DeepPartial<FindEventDto>, I>>(_: I): FindEventDto {
+    const message = createBaseFindEventDto();
+    return message;
+  },
+};
+
+function createBaseGetEventDto(): GetEventDto {
+  return {};
+}
+
+export const GetEventDto = {
+  encode(_: GetEventDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetEventDto {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetEventDto();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): GetEventDto {
+    return {};
+  },
+
+  toJSON(_: GetEventDto): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetEventDto>, I>>(base?: I): GetEventDto {
+    return GetEventDto.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetEventDto>, I>>(_: I): GetEventDto {
+    const message = createBaseGetEventDto();
     return message;
   },
 };
 
 export interface IEventService {
   Create(request: CreateEventDto): Promise<IEvent>;
-  Find(request: Query): Promise<FindEventResult>;
-  FindOne(request: IEvent): Promise<IEvent>;
+  Find(request: FindEventDto): Observable<IEvent>;
+  Get(request: GetEventDto): Promise<IEvent>;
 }
 
 export const IEventServiceServiceName = "event.IEventService";
@@ -273,7 +287,7 @@ export class IEventServiceClientImpl implements IEventService {
     this.rpc = rpc;
     this.Create = this.Create.bind(this);
     this.Find = this.Find.bind(this);
-    this.FindOne = this.FindOne.bind(this);
+    this.Get = this.Get.bind(this);
   }
   Create(request: CreateEventDto): Promise<IEvent> {
     const data = CreateEventDto.encode(request).finish();
@@ -281,21 +295,24 @@ export class IEventServiceClientImpl implements IEventService {
     return promise.then((data) => IEvent.decode(_m0.Reader.create(data)));
   }
 
-  Find(request: Query): Promise<FindEventResult> {
-    const data = Query.encode(request).finish();
-    const promise = this.rpc.request(this.service, "Find", data);
-    return promise.then((data) => FindEventResult.decode(_m0.Reader.create(data)));
+  Find(request: FindEventDto): Observable<IEvent> {
+    const data = FindEventDto.encode(request).finish();
+    const result = this.rpc.serverStreamingRequest(this.service, "Find", data);
+    return result.pipe(map((data) => IEvent.decode(_m0.Reader.create(data))));
   }
 
-  FindOne(request: IEvent): Promise<IEvent> {
-    const data = IEvent.encode(request).finish();
-    const promise = this.rpc.request(this.service, "FindOne", data);
+  Get(request: GetEventDto): Promise<IEvent> {
+    const data = GetEventDto.encode(request).finish();
+    const promise = this.rpc.request(this.service, "Get", data);
     return promise.then((data) => IEvent.decode(_m0.Reader.create(data)));
   }
 }
 
 interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  clientStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Promise<Uint8Array>;
+  serverStreamingRequest(service: string, method: string, data: Uint8Array): Observable<Uint8Array>;
+  bidirectionalStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Observable<Uint8Array>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
