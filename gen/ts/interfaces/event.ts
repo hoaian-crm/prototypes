@@ -272,18 +272,18 @@ export const GetEventDto = {
   },
 };
 
-export interface IEventService {
+export interface IEventController {
   Create(request: CreateEventDto): Promise<IEvent>;
   Find(request: FindEventDto): Observable<IEvent>;
   Get(request: GetEventDto): Promise<IEvent>;
 }
 
-export const IEventServiceServiceName = "event.IEventService";
-export class IEventServiceClientImpl implements IEventService {
+export const IEventControllerServiceName = "event.IEventController";
+export class IEventControllerClientImpl implements IEventController {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || IEventServiceServiceName;
+    this.service = opts?.service || IEventControllerServiceName;
     this.rpc = rpc;
     this.Create = this.Create.bind(this);
     this.Find = this.Find.bind(this);
