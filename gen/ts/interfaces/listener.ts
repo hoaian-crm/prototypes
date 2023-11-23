@@ -335,8 +335,8 @@ export const GetListenersByEventResult = {
 };
 
 export interface IListenerController {
-  AddListener(request: AddListenerDto): Promise<IListener>;
-  GetListenersByEvent(request: GetListenersByEventDto): Promise<GetListenersByEventResult>;
+  Add(request: AddListenerDto): Promise<IListener>;
+  Get(request: GetListenersByEventDto): Promise<GetListenersByEventResult>;
 }
 
 export const IListenerControllerServiceName = "listener.IListenerController";
@@ -346,18 +346,18 @@ export class IListenerControllerClientImpl implements IListenerController {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || IListenerControllerServiceName;
     this.rpc = rpc;
-    this.AddListener = this.AddListener.bind(this);
-    this.GetListenersByEvent = this.GetListenersByEvent.bind(this);
+    this.Add = this.Add.bind(this);
+    this.Get = this.Get.bind(this);
   }
-  AddListener(request: AddListenerDto): Promise<IListener> {
+  Add(request: AddListenerDto): Promise<IListener> {
     const data = AddListenerDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "AddListener", data);
+    const promise = this.rpc.request(this.service, "Add", data);
     return promise.then((data) => IListener.decode(_m0.Reader.create(data)));
   }
 
-  GetListenersByEvent(request: GetListenersByEventDto): Promise<GetListenersByEventResult> {
+  Get(request: GetListenersByEventDto): Promise<GetListenersByEventResult> {
     const data = GetListenersByEventDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "GetListenersByEvent", data);
+    const promise = this.rpc.request(this.service, "Get", data);
     return promise.then((data) => GetListenersByEventResult.decode(_m0.Reader.create(data)));
   }
 }

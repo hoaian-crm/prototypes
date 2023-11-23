@@ -4,8 +4,8 @@ package listener;
 
 
 service IListenerController {
-    rpc AddListener(AddListenerDto) returns (IListener);
-    rpc GetListenersByEvent(GetListenersByEventDto) returns (GetListenersByEventResult);
+    rpc Add(AddListenerDto) returns (IListener);
+    rpc Get(GetListenersByEventDto) returns (GetListenersByEventResult);
 }
 
 message IListener {
