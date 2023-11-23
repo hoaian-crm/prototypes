@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "interfaces/mail.proto";
+
 package event;
 
 message IEvent {
@@ -29,13 +31,8 @@ enum Events {
 
 message EmitEventDto {
   string name = 1;
-  oneof payload {
-    UserRegister user_register = 2;
-  }
-
-  message UserRegister {
-    string email = 1;
-    string otp = 2;
+  oneof Payload {
+    mail.SendMailDto mail = 2;
   }
 }
 
