@@ -4,7 +4,7 @@ import Long = require("long");
 
 export const protobufPackage = "listener";
 
-export interface Listener {
+export interface IListener {
   id: number;
   name: string;
   description: string;
@@ -22,15 +22,15 @@ export interface GetListenersByEventDto {
 }
 
 export interface GetListenersByEventResult {
-  result: Listener[];
+  result: IListener[];
 }
 
-function createBaseListener(): Listener {
+function createBaseIListener(): IListener {
   return { id: 0, name: "", description: "", eventId: 0 };
 }
 
-export const Listener = {
-  encode(message: Listener, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const IListener = {
+  encode(message: IListener, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== 0) {
       writer.uint32(8).int64(message.id);
     }
@@ -46,10 +46,10 @@ export const Listener = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Listener {
+  decode(input: _m0.Reader | Uint8Array, length?: number): IListener {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseListener();
+    const message = createBaseIListener();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -90,7 +90,7 @@ export const Listener = {
     return message;
   },
 
-  fromJSON(object: any): Listener {
+  fromJSON(object: any): IListener {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
@@ -99,7 +99,7 @@ export const Listener = {
     };
   },
 
-  toJSON(message: Listener): unknown {
+  toJSON(message: IListener): unknown {
     const obj: any = {};
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -116,11 +116,11 @@ export const Listener = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Listener>, I>>(base?: I): Listener {
-    return Listener.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<IListener>, I>>(base?: I): IListener {
+    return IListener.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Listener>, I>>(object: I): Listener {
-    const message = createBaseListener();
+  fromPartial<I extends Exact<DeepPartial<IListener>, I>>(object: I): IListener {
+    const message = createBaseIListener();
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
@@ -282,7 +282,7 @@ function createBaseGetListenersByEventResult(): GetListenersByEventResult {
 export const GetListenersByEventResult = {
   encode(message: GetListenersByEventResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.result) {
-      Listener.encode(v!, writer.uint32(10).fork()).ldelim();
+      IListener.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -299,7 +299,7 @@ export const GetListenersByEventResult = {
             break;
           }
 
-          message.result.push(Listener.decode(reader, reader.uint32()));
+          message.result.push(IListener.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -312,14 +312,14 @@ export const GetListenersByEventResult = {
 
   fromJSON(object: any): GetListenersByEventResult {
     return {
-      result: globalThis.Array.isArray(object?.result) ? object.result.map((e: any) => Listener.fromJSON(e)) : [],
+      result: globalThis.Array.isArray(object?.result) ? object.result.map((e: any) => IListener.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: GetListenersByEventResult): unknown {
     const obj: any = {};
     if (message.result?.length) {
-      obj.result = message.result.map((e) => Listener.toJSON(e));
+      obj.result = message.result.map((e) => IListener.toJSON(e));
     }
     return obj;
   },
@@ -329,13 +329,13 @@ export const GetListenersByEventResult = {
   },
   fromPartial<I extends Exact<DeepPartial<GetListenersByEventResult>, I>>(object: I): GetListenersByEventResult {
     const message = createBaseGetListenersByEventResult();
-    message.result = object.result?.map((e) => Listener.fromPartial(e)) || [];
+    message.result = object.result?.map((e) => IListener.fromPartial(e)) || [];
     return message;
   },
 };
 
 export interface IListenerController {
-  AddListener(request: AddListenerDto): Promise<Listener>;
+  AddListener(request: AddListenerDto): Promise<IListener>;
   GetListenersByEvent(request: GetListenersByEventDto): Promise<GetListenersByEventResult>;
 }
 
@@ -349,10 +349,10 @@ export class IListenerControllerClientImpl implements IListenerController {
     this.AddListener = this.AddListener.bind(this);
     this.GetListenersByEvent = this.GetListenersByEvent.bind(this);
   }
-  AddListener(request: AddListenerDto): Promise<Listener> {
+  AddListener(request: AddListenerDto): Promise<IListener> {
     const data = AddListenerDto.encode(request).finish();
     const promise = this.rpc.request(this.service, "AddListener", data);
-    return promise.then((data) => Listener.decode(_m0.Reader.create(data)));
+    return promise.then((data) => IListener.decode(_m0.Reader.create(data)));
   }
 
   GetListenersByEvent(request: GetListenersByEventDto): Promise<GetListenersByEventResult> {

@@ -4,11 +4,11 @@ package listener;
 
 
 service IListenerController {
-    rpc AddListener(AddListenerDto) returns (Listener);
+    rpc AddListener(AddListenerDto) returns (IListener);
     rpc GetListenersByEvent(GetListenersByEventDto) returns (GetListenersByEventResult);
 }
 
-message Listener {
+message IListener {
     int64 id = 1;
     string name = 2;
     string description = 3;
@@ -25,5 +25,5 @@ message GetListenersByEventDto {
     string event_name = 1;
 }
 message GetListenersByEventResult {
-    repeated Listener result = 1;
+    repeated IListener result = 1;
 }
