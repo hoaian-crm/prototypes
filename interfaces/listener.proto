@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package listener;
 
+import "interfaces/event.proto";
+
 
 service IListenerController {
     rpc Add(AddListenerDto) returns (IListener);
@@ -12,7 +14,7 @@ message IListener {
     int64 id = 1;
     string name = 2;
     string description = 3;
-    int64 event_id = 4;
+    event.IEvent event = 4;
 }
 
 message AddListenerDto {

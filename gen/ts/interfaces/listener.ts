@@ -1,5 +1,6 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
+import { IEvent } from "./event";
 import Long = require("long");
 
 export const protobufPackage = "listener";
@@ -8,7 +9,7 @@ export interface IListener {
   id: number;
   name: string;
   description: string;
-  eventId: number;
+  event: IEvent | undefined;
 }
 
 export interface AddListenerDto {
@@ -26,7 +27,7 @@ export interface GetListenersByEventResult {
 }
 
 function createBaseIListener(): IListener {
-  return { id: 0, name: "", description: "", eventId: 0 };
+  return { id: 0, name: "", description: "", event: undefined };
 }
 
 export const IListener = {
@@ -40,8 +41,8 @@ export const IListener = {
     if (message.description !== "") {
       writer.uint32(26).string(message.description);
     }
-    if (message.eventId !== 0) {
-      writer.uint32(32).int64(message.eventId);
+    if (message.event !== undefined) {
+      IEvent.encode(message.event, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -75,11 +76,11 @@ export const IListener = {
           message.description = reader.string();
           continue;
         case 4:
-          if (tag !== 32) {
+          if (tag !== 34) {
             break;
           }
 
-          message.eventId = longToNumber(reader.int64() as Long);
+          message.event = IEvent.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -95,7 +96,7 @@ export const IListener = {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       description: isSet(object.description) ? globalThis.String(object.description) : "",
-      eventId: isSet(object.eventId) ? globalThis.Number(object.eventId) : 0,
+      event: isSet(object.event) ? IEvent.fromJSON(object.event) : undefined,
     };
   },
 
@@ -110,8 +111,8 @@ export const IListener = {
     if (message.description !== "") {
       obj.description = message.description;
     }
-    if (message.eventId !== 0) {
-      obj.eventId = Math.round(message.eventId);
+    if (message.event !== undefined) {
+      obj.event = IEvent.toJSON(message.event);
     }
     return obj;
   },
@@ -124,7 +125,9 @@ export const IListener = {
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
-    message.eventId = object.eventId ?? 0;
+    message.event = (object.event !== undefined && object.event !== null)
+      ? IEvent.fromPartial(object.event)
+      : undefined;
     return message;
   },
 };
