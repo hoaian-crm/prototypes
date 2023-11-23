@@ -19,6 +19,12 @@ export interface SendMailDto {
   subject: string;
   template?: string | undefined;
   html?: string | undefined;
+  context: { [key: string]: string };
+}
+
+export interface SendMailDto_ContextEntry {
+  key: string;
+  value: string;
 }
 
 function createBaseIMail(): IMail {
@@ -126,7 +132,7 @@ export const IMail = {
 };
 
 function createBaseSendMailDto(): SendMailDto {
-  return { to: "", subject: "", template: undefined, html: undefined };
+  return { to: "", subject: "", template: undefined, html: undefined, context: {} };
 }
 
 export const SendMailDto = {
@@ -143,6 +149,9 @@ export const SendMailDto = {
     if (message.html !== undefined) {
       writer.uint32(42).string(message.html);
     }
+    Object.entries(message.context).forEach(([key, value]) => {
+      SendMailDto_ContextEntry.encode({ key: key as any, value }, writer.uint32(50).fork()).ldelim();
+    });
     return writer;
   },
 
@@ -181,6 +190,16 @@ export const SendMailDto = {
 
           message.html = reader.string();
           continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          const entry6 = SendMailDto_ContextEntry.decode(reader, reader.uint32());
+          if (entry6.value !== undefined) {
+            message.context[entry6.key] = entry6.value;
+          }
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -196,6 +215,12 @@ export const SendMailDto = {
       subject: isSet(object.subject) ? globalThis.String(object.subject) : "",
       template: isSet(object.template) ? globalThis.String(object.template) : undefined,
       html: isSet(object.html) ? globalThis.String(object.html) : undefined,
+      context: isObject(object.context)
+        ? Object.entries(object.context).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+          acc[key] = String(value);
+          return acc;
+        }, {})
+        : {},
     };
   },
 
@@ -213,6 +238,15 @@ export const SendMailDto = {
     if (message.html !== undefined) {
       obj.html = message.html;
     }
+    if (message.context) {
+      const entries = Object.entries(message.context);
+      if (entries.length > 0) {
+        obj.context = {};
+        entries.forEach(([k, v]) => {
+          obj.context[k] = v;
+        });
+      }
+    }
     return obj;
   },
 
@@ -225,6 +259,86 @@ export const SendMailDto = {
     message.subject = object.subject ?? "";
     message.template = object.template ?? undefined;
     message.html = object.html ?? undefined;
+    message.context = Object.entries(object.context ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = globalThis.String(value);
+      }
+      return acc;
+    }, {});
+    return message;
+  },
+};
+
+function createBaseSendMailDto_ContextEntry(): SendMailDto_ContextEntry {
+  return { key: "", value: "" };
+}
+
+export const SendMailDto_ContextEntry = {
+  encode(message: SendMailDto_ContextEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SendMailDto_ContextEntry {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSendMailDto_ContextEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SendMailDto_ContextEntry {
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? globalThis.String(object.value) : "",
+    };
+  },
+
+  toJSON(message: SendMailDto_ContextEntry): unknown {
+    const obj: any = {};
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== "") {
+      obj.value = message.value;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SendMailDto_ContextEntry>, I>>(base?: I): SendMailDto_ContextEntry {
+    return SendMailDto_ContextEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SendMailDto_ContextEntry>, I>>(object: I): SendMailDto_ContextEntry {
+    const message = createBaseSendMailDto_ContextEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
     return message;
   },
 };
@@ -251,6 +365,10 @@ function longToNumber(long: Long): number {
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
 }
 
 function isSet(value: any): boolean {
