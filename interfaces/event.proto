@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-import "interfaces/mail.proto";
-
 package event;
+
+import "interfaces/mail.proto";
 
 message IEvent {
     int64 id = 1;
