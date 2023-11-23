@@ -11,17 +11,17 @@ export interface Listener {
   eventId: number;
 }
 
-export interface Listener_AddListenerDto {
+export interface AddListenerDto {
   name: string;
   description: string;
   eventName: string;
 }
 
-export interface Listener_GetListenersByEvent {
+export interface GetListenersByEventDto {
   eventName: string;
 }
 
-export interface Listener_GetListenersByEventResult {
+export interface GetListenersByEventResult {
   result: Listener[];
 }
 
@@ -129,12 +129,12 @@ export const Listener = {
   },
 };
 
-function createBaseListener_AddListenerDto(): Listener_AddListenerDto {
+function createBaseAddListenerDto(): AddListenerDto {
   return { name: "", description: "", eventName: "" };
 }
 
-export const Listener_AddListenerDto = {
-  encode(message: Listener_AddListenerDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const AddListenerDto = {
+  encode(message: AddListenerDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -147,10 +147,10 @@ export const Listener_AddListenerDto = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Listener_AddListenerDto {
+  decode(input: _m0.Reader | Uint8Array, length?: number): AddListenerDto {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseListener_AddListenerDto();
+    const message = createBaseAddListenerDto();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -184,7 +184,7 @@ export const Listener_AddListenerDto = {
     return message;
   },
 
-  fromJSON(object: any): Listener_AddListenerDto {
+  fromJSON(object: any): AddListenerDto {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       description: isSet(object.description) ? globalThis.String(object.description) : "",
@@ -192,7 +192,7 @@ export const Listener_AddListenerDto = {
     };
   },
 
-  toJSON(message: Listener_AddListenerDto): unknown {
+  toJSON(message: AddListenerDto): unknown {
     const obj: any = {};
     if (message.name !== "") {
       obj.name = message.name;
@@ -206,11 +206,11 @@ export const Listener_AddListenerDto = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Listener_AddListenerDto>, I>>(base?: I): Listener_AddListenerDto {
-    return Listener_AddListenerDto.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<AddListenerDto>, I>>(base?: I): AddListenerDto {
+    return AddListenerDto.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Listener_AddListenerDto>, I>>(object: I): Listener_AddListenerDto {
-    const message = createBaseListener_AddListenerDto();
+  fromPartial<I extends Exact<DeepPartial<AddListenerDto>, I>>(object: I): AddListenerDto {
+    const message = createBaseAddListenerDto();
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.eventName = object.eventName ?? "";
@@ -218,22 +218,22 @@ export const Listener_AddListenerDto = {
   },
 };
 
-function createBaseListener_GetListenersByEvent(): Listener_GetListenersByEvent {
+function createBaseGetListenersByEventDto(): GetListenersByEventDto {
   return { eventName: "" };
 }
 
-export const Listener_GetListenersByEvent = {
-  encode(message: Listener_GetListenersByEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const GetListenersByEventDto = {
+  encode(message: GetListenersByEventDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.eventName !== "") {
       writer.uint32(10).string(message.eventName);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Listener_GetListenersByEvent {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetListenersByEventDto {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseListener_GetListenersByEvent();
+    const message = createBaseGetListenersByEventDto();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -253,11 +253,11 @@ export const Listener_GetListenersByEvent = {
     return message;
   },
 
-  fromJSON(object: any): Listener_GetListenersByEvent {
+  fromJSON(object: any): GetListenersByEventDto {
     return { eventName: isSet(object.eventName) ? globalThis.String(object.eventName) : "" };
   },
 
-  toJSON(message: Listener_GetListenersByEvent): unknown {
+  toJSON(message: GetListenersByEventDto): unknown {
     const obj: any = {};
     if (message.eventName !== "") {
       obj.eventName = message.eventName;
@@ -265,32 +265,32 @@ export const Listener_GetListenersByEvent = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Listener_GetListenersByEvent>, I>>(base?: I): Listener_GetListenersByEvent {
-    return Listener_GetListenersByEvent.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<GetListenersByEventDto>, I>>(base?: I): GetListenersByEventDto {
+    return GetListenersByEventDto.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Listener_GetListenersByEvent>, I>>(object: I): Listener_GetListenersByEvent {
-    const message = createBaseListener_GetListenersByEvent();
+  fromPartial<I extends Exact<DeepPartial<GetListenersByEventDto>, I>>(object: I): GetListenersByEventDto {
+    const message = createBaseGetListenersByEventDto();
     message.eventName = object.eventName ?? "";
     return message;
   },
 };
 
-function createBaseListener_GetListenersByEventResult(): Listener_GetListenersByEventResult {
+function createBaseGetListenersByEventResult(): GetListenersByEventResult {
   return { result: [] };
 }
 
-export const Listener_GetListenersByEventResult = {
-  encode(message: Listener_GetListenersByEventResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const GetListenersByEventResult = {
+  encode(message: GetListenersByEventResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.result) {
       Listener.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Listener_GetListenersByEventResult {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetListenersByEventResult {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseListener_GetListenersByEventResult();
+    const message = createBaseGetListenersByEventResult();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -310,13 +310,13 @@ export const Listener_GetListenersByEventResult = {
     return message;
   },
 
-  fromJSON(object: any): Listener_GetListenersByEventResult {
+  fromJSON(object: any): GetListenersByEventResult {
     return {
       result: globalThis.Array.isArray(object?.result) ? object.result.map((e: any) => Listener.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: Listener_GetListenersByEventResult): unknown {
+  toJSON(message: GetListenersByEventResult): unknown {
     const obj: any = {};
     if (message.result?.length) {
       obj.result = message.result.map((e) => Listener.toJSON(e));
@@ -324,23 +324,19 @@ export const Listener_GetListenersByEventResult = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Listener_GetListenersByEventResult>, I>>(
-    base?: I,
-  ): Listener_GetListenersByEventResult {
-    return Listener_GetListenersByEventResult.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<GetListenersByEventResult>, I>>(base?: I): GetListenersByEventResult {
+    return GetListenersByEventResult.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Listener_GetListenersByEventResult>, I>>(
-    object: I,
-  ): Listener_GetListenersByEventResult {
-    const message = createBaseListener_GetListenersByEventResult();
+  fromPartial<I extends Exact<DeepPartial<GetListenersByEventResult>, I>>(object: I): GetListenersByEventResult {
+    const message = createBaseGetListenersByEventResult();
     message.result = object.result?.map((e) => Listener.fromPartial(e)) || [];
     return message;
   },
 };
 
 export interface IListenerController {
-  AddListener(request: Listener_AddListenerDto): Promise<Listener>;
-  GetListenersByEvent(request: Listener_GetListenersByEvent): Promise<Listener_GetListenersByEventResult>;
+  AddListener(request: AddListenerDto): Promise<Listener>;
+  GetListenersByEvent(request: GetListenersByEventDto): Promise<GetListenersByEventResult>;
 }
 
 export const IListenerControllerServiceName = "listener.IListenerController";
@@ -353,16 +349,16 @@ export class IListenerControllerClientImpl implements IListenerController {
     this.AddListener = this.AddListener.bind(this);
     this.GetListenersByEvent = this.GetListenersByEvent.bind(this);
   }
-  AddListener(request: Listener_AddListenerDto): Promise<Listener> {
-    const data = Listener_AddListenerDto.encode(request).finish();
+  AddListener(request: AddListenerDto): Promise<Listener> {
+    const data = AddListenerDto.encode(request).finish();
     const promise = this.rpc.request(this.service, "AddListener", data);
     return promise.then((data) => Listener.decode(_m0.Reader.create(data)));
   }
 
-  GetListenersByEvent(request: Listener_GetListenersByEvent): Promise<Listener_GetListenersByEventResult> {
-    const data = Listener_GetListenersByEvent.encode(request).finish();
+  GetListenersByEvent(request: GetListenersByEventDto): Promise<GetListenersByEventResult> {
+    const data = GetListenersByEventDto.encode(request).finish();
     const promise = this.rpc.request(this.service, "GetListenersByEvent", data);
-    return promise.then((data) => Listener_GetListenersByEventResult.decode(_m0.Reader.create(data)));
+    return promise.then((data) => GetListenersByEventResult.decode(_m0.Reader.create(data)));
   }
 }
 
