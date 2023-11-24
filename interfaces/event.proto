@@ -31,9 +31,14 @@ enum Events {
 
 message EmitEventDto {
   string name = 1;
-  oneof Payload {
-    mail.SendMailDto mail = 2;
-  }
+
+  Payload payload = 2;
+
+  message Payload {
+    oneof value {
+      mail.SendMailDto mail = 2 [json_name = "payload"];
+    }
+  } 
 }
 
 message EmitEventResult {

@@ -49,6 +49,10 @@ export interface GetEventDto {
 
 export interface EmitEventDto {
   name: string;
+  payload: EmitEventDto_Payload | undefined;
+}
+
+export interface EmitEventDto_Payload {
   mail?: SendMailDto | undefined;
 }
 
@@ -278,7 +282,7 @@ export const GetEventDto = {
 };
 
 function createBaseEmitEventDto(): EmitEventDto {
-  return { name: "", mail: undefined };
+  return { name: "", payload: undefined };
 }
 
 export const EmitEventDto = {
@@ -286,8 +290,8 @@ export const EmitEventDto = {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.mail !== undefined) {
-      SendMailDto.encode(message.mail, writer.uint32(18).fork()).ldelim();
+    if (message.payload !== undefined) {
+      EmitEventDto_Payload.encode(message.payload, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -311,7 +315,7 @@ export const EmitEventDto = {
             break;
           }
 
-          message.mail = SendMailDto.decode(reader, reader.uint32());
+          message.payload = EmitEventDto_Payload.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -325,7 +329,7 @@ export const EmitEventDto = {
   fromJSON(object: any): EmitEventDto {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      mail: isSet(object.mail) ? SendMailDto.fromJSON(object.mail) : undefined,
+      payload: isSet(object.payload) ? EmitEventDto_Payload.fromJSON(object.payload) : undefined,
     };
   },
 
@@ -334,8 +338,8 @@ export const EmitEventDto = {
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (message.mail !== undefined) {
-      obj.mail = SendMailDto.toJSON(message.mail);
+    if (message.payload !== undefined) {
+      obj.payload = EmitEventDto_Payload.toJSON(message.payload);
     }
     return obj;
   },
@@ -346,6 +350,65 @@ export const EmitEventDto = {
   fromPartial<I extends Exact<DeepPartial<EmitEventDto>, I>>(object: I): EmitEventDto {
     const message = createBaseEmitEventDto();
     message.name = object.name ?? "";
+    message.payload = (object.payload !== undefined && object.payload !== null)
+      ? EmitEventDto_Payload.fromPartial(object.payload)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseEmitEventDto_Payload(): EmitEventDto_Payload {
+  return { mail: undefined };
+}
+
+export const EmitEventDto_Payload = {
+  encode(message: EmitEventDto_Payload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.mail !== undefined) {
+      SendMailDto.encode(message.mail, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EmitEventDto_Payload {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEmitEventDto_Payload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.mail = SendMailDto.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EmitEventDto_Payload {
+    return { mail: isSet(object.payload) ? SendMailDto.fromJSON(object.payload) : undefined };
+  },
+
+  toJSON(message: EmitEventDto_Payload): unknown {
+    const obj: any = {};
+    if (message.mail !== undefined) {
+      obj.payload = SendMailDto.toJSON(message.mail);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<EmitEventDto_Payload>, I>>(base?: I): EmitEventDto_Payload {
+    return EmitEventDto_Payload.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<EmitEventDto_Payload>, I>>(object: I): EmitEventDto_Payload {
+    const message = createBaseEmitEventDto_Payload();
     message.mail = (object.mail !== undefined && object.mail !== null)
       ? SendMailDto.fromPartial(object.mail)
       : undefined;
