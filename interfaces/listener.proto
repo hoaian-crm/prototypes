@@ -4,6 +4,7 @@ package listener;
 
 import "interfaces/event.proto";
 
+option go_package = "./listener";
 
 service IListenerController {
     rpc Add(AddListenerDto) returns (IListener);
