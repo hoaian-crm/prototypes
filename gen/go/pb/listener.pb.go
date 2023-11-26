@@ -4,10 +4,9 @@
 // 	protoc        v3.21.12
 // source: interfaces/listener.proto
 
-package listener
+package pb
 
 import (
-	event "github.com/hoaian-crm/prototypes/gen/go/event"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -26,10 +25,10 @@ type IListener struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          int64         `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name        string        `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description string        `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Event       *event.IEvent `protobuf:"bytes,4,opt,name=event,proto3" json:"event,omitempty"`
+	Id          int64   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string  `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description string  `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Event       *IEvent `protobuf:"bytes,4,opt,name=event,proto3" json:"event,omitempty"`
 }
 
 func (x *IListener) Reset() {
@@ -85,7 +84,7 @@ func (x *IListener) GetDescription() string {
 	return ""
 }
 
-func (x *IListener) GetEvent() *event.IEvent {
+func (x *IListener) GetEvent() *IEvent {
 	if x != nil {
 		return x.Event
 	}
@@ -287,11 +286,8 @@ var file_interfaces_listener_proto_rawDesc = []byte{
 	0x47, 0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x65, 0x72, 0x73, 0x42, 0x79, 0x45, 0x76,
 	0x65, 0x6e, 0x74, 0x44, 0x74, 0x6f, 0x1a, 0x23, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x65,
 	0x72, 0x2e, 0x47, 0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x65, 0x72, 0x73, 0x42, 0x79,
-	0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x32, 0x5a, 0x30, 0x67,
-	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x68, 0x6f, 0x61, 0x69, 0x61, 0x6e,
-	0x2d, 0x63, 0x72, 0x6d, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2f,
-	0x67, 0x65, 0x6e, 0x2f, 0x67, 0x6f, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x65, 0x72, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x05, 0x5a, 0x03, 0x2f,
+	0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -312,7 +308,7 @@ var file_interfaces_listener_proto_goTypes = []interface{}{
 	(*AddListenerDto)(nil),            // 1: listener.AddListenerDto
 	(*GetListenersByEventDto)(nil),    // 2: listener.GetListenersByEventDto
 	(*GetListenersByEventResult)(nil), // 3: listener.GetListenersByEventResult
-	(*event.IEvent)(nil),              // 4: event.IEvent
+	(*IEvent)(nil),                    // 4: event.IEvent
 }
 var file_interfaces_listener_proto_depIdxs = []int32{
 	4, // 0: listener.IListener.event:type_name -> event.IEvent
@@ -333,6 +329,7 @@ func file_interfaces_listener_proto_init() {
 	if File_interfaces_listener_proto != nil {
 		return
 	}
+	file_interfaces_event_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_interfaces_listener_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*IListener); i {
