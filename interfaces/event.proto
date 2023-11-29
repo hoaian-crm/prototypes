@@ -3,6 +3,7 @@ syntax = "proto3";
 package event;
 
 import "interfaces/mail.proto";
+option go_package = "/pb";
 
 message IEvent {
     int64 id = 1;
@@ -31,9 +32,14 @@ enum Events {
 
 message EmitEventDto {
   string name = 1;
-  oneof Payload {
-    mail.SendMailDto mail = 2;
-  }
+
+  Payload payload = 2;
+
+  message Payload {
+    oneof value {
+      mail.SendMailDto mail = 2 [json_name = "payload"];
+    }
+  } 
 }
 
 message EmitEventResult {
