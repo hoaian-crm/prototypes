@@ -53,8 +53,8 @@ export class Response<T extends any> {
     return {
       messages: [Messages.deleteSuccess],
       data: {
-        result,
-        total: 1,
+        result: null,
+        total: result,
       },
     };
   }
