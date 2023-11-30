@@ -282,8 +282,8 @@ export const ReadFileResponse = {
 };
 
 export interface IStorageController {
-  put(request: IFile): Promise<PutFileResponse>;
-  read(request: ReadFile): Promise<ReadFile>;
+  Put(request: IFile): Promise<PutFileResponse>;
+  Read(request: ReadFile): Promise<ReadFileResponse>;
 }
 
 export const IStorageControllerServiceName = "IStorageController";
@@ -293,19 +293,19 @@ export class IStorageControllerClientImpl implements IStorageController {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || IStorageControllerServiceName;
     this.rpc = rpc;
-    this.put = this.put.bind(this);
-    this.read = this.read.bind(this);
+    this.Put = this.Put.bind(this);
+    this.Read = this.Read.bind(this);
   }
-  put(request: IFile): Promise<PutFileResponse> {
+  Put(request: IFile): Promise<PutFileResponse> {
     const data = IFile.encode(request).finish();
-    const promise = this.rpc.request(this.service, "put", data);
+    const promise = this.rpc.request(this.service, "Put", data);
     return promise.then((data) => PutFileResponse.decode(_m0.Reader.create(data)));
   }
 
-  read(request: ReadFile): Promise<ReadFile> {
+  Read(request: ReadFile): Promise<ReadFileResponse> {
     const data = ReadFile.encode(request).finish();
-    const promise = this.rpc.request(this.service, "read", data);
-    return promise.then((data) => ReadFile.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(this.service, "Read", data);
+    return promise.then((data) => ReadFileResponse.decode(_m0.Reader.create(data)));
   }
 }
 

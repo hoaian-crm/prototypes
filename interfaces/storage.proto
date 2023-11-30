@@ -19,6 +19,6 @@ message ReadFileResponse {
 }
 
 service IStorageController {
-  rpc put(IFile) returns (PutFileResponse);
-  rpc read(ReadFile) returns (ReadFile);
+  rpc Put(IFile) returns (PutFileResponse);
+  rpc Read(ReadFile) returns (ReadFileResponse);
 }
