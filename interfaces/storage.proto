@@ -1,5 +1,24 @@
 syntax = "proto3";
 
-message IStorage {
+message IFile {
+  bytes content = 1;
+  string destination = 2;
+  string filename = 3;
+}
 
+message PutFileResponse {
+  string url = 1;
+}
+
+message ReadFile {
+  string filePath = 1;
+}
+
+message ReadFileResponse {
+  bytes content = 1;
+}
+
+service IStorageController {
+  rpc put(IFile) returns (PutFileResponse);
+  rpc read(ReadFile) returns (ReadFile);
 }

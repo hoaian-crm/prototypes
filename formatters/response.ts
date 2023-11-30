@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 // @ts-ignore
 import { BadRequestException } from '@nestjs/common';
-=======
->>>>>>> 606c71dacdfa47c3047fb3c2fe83a750bcb143eb
 import { Messages } from './messages';
 
 export type IMessage = {
