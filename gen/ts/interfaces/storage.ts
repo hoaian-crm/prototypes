@@ -1,5 +1,7 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 export const protobufPackage = "storage";
 
@@ -343,7 +345,7 @@ export const HealthCheckResult = {
 };
 
 export interface IStorageController {
-  Put(request: IFile): Promise<PutFileResponse>;
+  Put(request: IFile): Observable<PutFileResponse>;
   Read(request: ReadFile): Promise<ReadFileResponse>;
   HealthCheck(request: HealthCheckResult): Promise<HealthCheckResult>;
 }
@@ -359,10 +361,10 @@ export class IStorageControllerClientImpl implements IStorageController {
     this.Read = this.Read.bind(this);
     this.HealthCheck = this.HealthCheck.bind(this);
   }
-  Put(request: IFile): Promise<PutFileResponse> {
+  Put(request: IFile): Observable<PutFileResponse> {
     const data = IFile.encode(request).finish();
-    const promise = this.rpc.request(this.service, "Put", data);
-    return promise.then((data) => PutFileResponse.decode(_m0.Reader.create(data)));
+    const result = this.rpc.serverStreamingRequest(this.service, "Put", data);
+    return result.pipe(map((data) => PutFileResponse.decode(_m0.Reader.create(data))));
   }
 
   Read(request: ReadFile): Promise<ReadFileResponse> {
@@ -380,6 +382,9 @@ export class IStorageControllerClientImpl implements IStorageController {
 
 interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  clientStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Promise<Uint8Array>;
+  serverStreamingRequest(service: string, method: string, data: Uint8Array): Observable<Uint8Array>;
+  bidirectionalStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Observable<Uint8Array>;
 }
 
 function bytesFromBase64(b64: string): Uint8Array {

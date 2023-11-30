@@ -25,7 +25,7 @@ message HealthCheckResult {
 }
 
 service IStorageController {
-  rpc Put(IFile) returns (PutFileResponse);
+  rpc Put(IFile) returns (stream PutFileResponse);
   rpc Read(ReadFile) returns (ReadFileResponse);
   rpc HealthCheck(HealthCheckResult) returns (HealthCheckResult);
 }
