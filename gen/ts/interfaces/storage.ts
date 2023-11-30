@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "";
+export const protobufPackage = "storage";
 
 export interface IFile {
   content: Uint8Array;
@@ -286,7 +286,7 @@ export interface IStorageController {
   Read(request: ReadFile): Promise<ReadFileResponse>;
 }
 
-export const IStorageControllerServiceName = "IStorageController";
+export const IStorageControllerServiceName = "storage.IStorageController";
 export class IStorageControllerClientImpl implements IStorageController {
   private readonly rpc: Rpc;
   private readonly service: string;
