@@ -21,6 +21,10 @@ export interface ReadFileResponse {
   content: Uint8Array;
 }
 
+export interface HealthCheckResult {
+  message: string;
+}
+
 function createBaseIFile(): IFile {
   return { content: new Uint8Array(0), destination: "", filename: "" };
 }
@@ -281,9 +285,67 @@ export const ReadFileResponse = {
   },
 };
 
+function createBaseHealthCheckResult(): HealthCheckResult {
+  return { message: "" };
+}
+
+export const HealthCheckResult = {
+  encode(message: HealthCheckResult, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.message !== "") {
+      writer.uint32(10).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): HealthCheckResult {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHealthCheckResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): HealthCheckResult {
+    return { message: isSet(object.message) ? globalThis.String(object.message) : "" };
+  },
+
+  toJSON(message: HealthCheckResult): unknown {
+    const obj: any = {};
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<HealthCheckResult>, I>>(base?: I): HealthCheckResult {
+    return HealthCheckResult.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<HealthCheckResult>, I>>(object: I): HealthCheckResult {
+    const message = createBaseHealthCheckResult();
+    message.message = object.message ?? "";
+    return message;
+  },
+};
+
 export interface IStorageController {
   Put(request: IFile): Promise<PutFileResponse>;
   Read(request: ReadFile): Promise<ReadFileResponse>;
+  HealthCheck(request: HealthCheckResult): Promise<HealthCheckResult>;
 }
 
 export const IStorageControllerServiceName = "storage.IStorageController";
@@ -295,6 +357,7 @@ export class IStorageControllerClientImpl implements IStorageController {
     this.rpc = rpc;
     this.Put = this.Put.bind(this);
     this.Read = this.Read.bind(this);
+    this.HealthCheck = this.HealthCheck.bind(this);
   }
   Put(request: IFile): Promise<PutFileResponse> {
     const data = IFile.encode(request).finish();
@@ -306,6 +369,12 @@ export class IStorageControllerClientImpl implements IStorageController {
     const data = ReadFile.encode(request).finish();
     const promise = this.rpc.request(this.service, "Read", data);
     return promise.then((data) => ReadFileResponse.decode(_m0.Reader.create(data)));
+  }
+
+  HealthCheck(request: HealthCheckResult): Promise<HealthCheckResult> {
+    const data = HealthCheckResult.encode(request).finish();
+    const promise = this.rpc.request(this.service, "HealthCheck", data);
+    return promise.then((data) => HealthCheckResult.decode(_m0.Reader.create(data)));
   }
 }
 
