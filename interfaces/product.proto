@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package product;
+
+service IProductController {
+  rpc Get (GetProductDto) returns (IProductDetail);
+}
+
+message GetProductDto{
+  int64 id = 1;
+}
+
+message IProductDetail{
+  int64 id =  1;
+  string name = 2;
+  string alias = 3;
+  int64 price = 4;
+  int64 discount = 5;
+}
