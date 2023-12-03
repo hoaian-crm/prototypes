@@ -7,7 +7,7 @@ service IProductController {
 }
 
 message GetProductDto{
-  int64 id = 1;
+  repeated int64 id = 1;
 }
 
 message IProductDetail{

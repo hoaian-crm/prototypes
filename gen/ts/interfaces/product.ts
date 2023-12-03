@@ -5,7 +5,7 @@ import Long = require("long");
 export const protobufPackage = "product";
 
 export interface GetProductDto {
-  id: number;
+  id: number[];
 }
 
 export interface IProductDetail {
@@ -17,14 +17,16 @@ export interface IProductDetail {
 }
 
 function createBaseGetProductDto(): GetProductDto {
-  return { id: 0 };
+  return { id: [] };
 }
 
 export const GetProductDto = {
   encode(message: GetProductDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== 0) {
-      writer.uint32(8).int64(message.id);
+    writer.uint32(10).fork();
+    for (const v of message.id) {
+      writer.int64(v);
     }
+    writer.ldelim();
     return writer;
   },
 
@@ -36,12 +38,22 @@ export const GetProductDto = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
-            break;
+          if (tag === 8) {
+            message.id.push(longToNumber(reader.int64() as Long));
+
+            continue;
           }
 
-          message.id = longToNumber(reader.int64() as Long);
-          continue;
+          if (tag === 10) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.id.push(longToNumber(reader.int64() as Long));
+            }
+
+            continue;
+          }
+
+          break;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -52,13 +64,13 @@ export const GetProductDto = {
   },
 
   fromJSON(object: any): GetProductDto {
-    return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
+    return { id: globalThis.Array.isArray(object?.id) ? object.id.map((e: any) => globalThis.Number(e)) : [] };
   },
 
   toJSON(message: GetProductDto): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
-      obj.id = Math.round(message.id);
+    if (message.id?.length) {
+      obj.id = message.id.map((e) => Math.round(e));
     }
     return obj;
   },
@@ -68,7 +80,7 @@ export const GetProductDto = {
   },
   fromPartial<I extends Exact<DeepPartial<GetProductDto>, I>>(object: I): GetProductDto {
     const message = createBaseGetProductDto();
-    message.id = object.id ?? 0;
+    message.id = object.id?.map((e) => e) || [];
     return message;
   },
 };
