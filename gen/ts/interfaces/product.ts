@@ -17,7 +17,7 @@ export interface IProductDetail {
 }
 
 export interface IProductResponse {
-  product: IProductDetail[];
+  products: IProductDetail[];
 }
 
 function createBaseGetProductDto(): GetProductDto {
@@ -209,12 +209,12 @@ export const IProductDetail = {
 };
 
 function createBaseIProductResponse(): IProductResponse {
-  return { product: [] };
+  return { products: [] };
 }
 
 export const IProductResponse = {
   encode(message: IProductResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.product) {
+    for (const v of message.products) {
       IProductDetail.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
@@ -232,7 +232,7 @@ export const IProductResponse = {
             break;
           }
 
-          message.product.push(IProductDetail.decode(reader, reader.uint32()));
+          message.products.push(IProductDetail.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -245,16 +245,16 @@ export const IProductResponse = {
 
   fromJSON(object: any): IProductResponse {
     return {
-      product: globalThis.Array.isArray(object?.product)
-        ? object.product.map((e: any) => IProductDetail.fromJSON(e))
+      products: globalThis.Array.isArray(object?.products)
+        ? object.products.map((e: any) => IProductDetail.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: IProductResponse): unknown {
     const obj: any = {};
-    if (message.product?.length) {
-      obj.product = message.product.map((e) => IProductDetail.toJSON(e));
+    if (message.products?.length) {
+      obj.products = message.products.map((e) => IProductDetail.toJSON(e));
     }
     return obj;
   },
@@ -264,7 +264,7 @@ export const IProductResponse = {
   },
   fromPartial<I extends Exact<DeepPartial<IProductResponse>, I>>(object: I): IProductResponse {
     const message = createBaseIProductResponse();
-    message.product = object.product?.map((e) => IProductDetail.fromPartial(e)) || [];
+    message.products = object.products?.map((e) => IProductDetail.fromPartial(e)) || [];
     return message;
   },
 };

@@ -19,5 +19,5 @@ message IProductDetail{
 }
 
 message IProductResponse{
-  repeated IProductDetail product = 1;
+  repeated IProductDetail products = 1;
 }
