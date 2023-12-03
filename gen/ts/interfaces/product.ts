@@ -193,7 +193,7 @@ export const IProductDetail = {
 };
 
 export interface IProductController {
-  Get(request: GetProductDto): Promise<IProductDetail>;
+  GetById(request: GetProductDto): Promise<IProductDetail>;
 }
 
 export const IProductControllerServiceName = "product.IProductController";
@@ -203,11 +203,11 @@ export class IProductControllerClientImpl implements IProductController {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || IProductControllerServiceName;
     this.rpc = rpc;
-    this.Get = this.Get.bind(this);
+    this.GetById = this.GetById.bind(this);
   }
-  Get(request: GetProductDto): Promise<IProductDetail> {
+  GetById(request: GetProductDto): Promise<IProductDetail> {
     const data = GetProductDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "Get", data);
+    const promise = this.rpc.request(this.service, "GetById", data);
     return promise.then((data) => IProductDetail.decode(_m0.Reader.create(data)));
   }
 }

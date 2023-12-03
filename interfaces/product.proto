@@ -3,7 +3,7 @@ syntax = "proto3";
 package product;
 
 service IProductController {
-  rpc Get (GetProductDto) returns (IProductDetail);
+  rpc GetById (GetProductDto) returns (IProductDetail);
 }
 
 message GetProductDto{
