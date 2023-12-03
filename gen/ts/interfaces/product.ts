@@ -16,6 +16,10 @@ export interface IProductDetail {
   discount: number;
 }
 
+export interface IProductResponse {
+  product: IProductDetail[];
+}
+
 function createBaseGetProductDto(): GetProductDto {
   return { id: [] };
 }
@@ -204,8 +208,69 @@ export const IProductDetail = {
   },
 };
 
+function createBaseIProductResponse(): IProductResponse {
+  return { product: [] };
+}
+
+export const IProductResponse = {
+  encode(message: IProductResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.product) {
+      IProductDetail.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): IProductResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIProductResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.product.push(IProductDetail.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): IProductResponse {
+    return {
+      product: globalThis.Array.isArray(object?.product)
+        ? object.product.map((e: any) => IProductDetail.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: IProductResponse): unknown {
+    const obj: any = {};
+    if (message.product?.length) {
+      obj.product = message.product.map((e) => IProductDetail.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<IProductResponse>, I>>(base?: I): IProductResponse {
+    return IProductResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<IProductResponse>, I>>(object: I): IProductResponse {
+    const message = createBaseIProductResponse();
+    message.product = object.product?.map((e) => IProductDetail.fromPartial(e)) || [];
+    return message;
+  },
+};
+
 export interface IProductController {
-  GetById(request: GetProductDto): Promise<IProductDetail>;
+  GetById(request: GetProductDto): Promise<IProductResponse>;
 }
 
 export const IProductControllerServiceName = "product.IProductController";
@@ -217,10 +282,10 @@ export class IProductControllerClientImpl implements IProductController {
     this.rpc = rpc;
     this.GetById = this.GetById.bind(this);
   }
-  GetById(request: GetProductDto): Promise<IProductDetail> {
+  GetById(request: GetProductDto): Promise<IProductResponse> {
     const data = GetProductDto.encode(request).finish();
     const promise = this.rpc.request(this.service, "GetById", data);
-    return promise.then((data) => IProductDetail.decode(_m0.Reader.create(data)));
+    return promise.then((data) => IProductResponse.decode(_m0.Reader.create(data)));
   }
 }
 

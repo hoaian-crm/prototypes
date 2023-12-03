@@ -3,7 +3,7 @@ syntax = "proto3";
 package product;
 
 service IProductController {
-  rpc GetById (GetProductDto) returns (IProductDetail);
+  rpc GetById (GetProductDto) returns (IProductResponse);
 }
 
 message GetProductDto{
@@ -16,4 +16,8 @@ message IProductDetail{
   string alias = 3;
   int64 price = 4;
   int64 discount = 5;
+}
+
+message IProductResponse{
+  repeated IProductDetail product = 1;
 }
