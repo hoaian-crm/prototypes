@@ -9,3 +9,5 @@ export * from './formatters/messages';
 export * from './formatters/observable';
 export * from './formatters/query';
 export * from './formatters/response';
+
+export * from './constants/redis_db';
