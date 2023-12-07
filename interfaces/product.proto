@@ -3,11 +3,21 @@ syntax = "proto3";
 package product;
 
 service IProductController {
-  rpc GetById (GetProductDto) returns (IProductResponse);
+  rpc GetById (IdDto) returns (IProductResponse);
+  rpc GetManyByIds (IdsProduct) returns (IArrayProductResponse);
+  rpc GetManyByAlias (AliasDto) returns (IArrayProductResponse);
 }
 
-message GetProductDto{
-  repeated int64 id = 1;
+message IdDto{
+  int64 id = 1;
+}
+
+message IdsDto{
+  int64 id = 1;
+}
+
+message AliasDto{
+  repeated string alias = 1;
 }
 
 message IProductDetail{
@@ -19,5 +29,13 @@ message IProductDetail{
 }
 
 message IProductResponse{
-  repeated IProductDetail products = 1;
+  int64 id =  1;
+  string name = 2;
+  string alias = 3;
+  int64 price = 4;
+  int64 discount = 5;
+}
+
+message IArrayProductResponse{
+  repeated IProductResponse products = 1;
 }
