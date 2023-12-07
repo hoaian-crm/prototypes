@@ -5,6 +5,7 @@ package product;
 service IProductController {
   rpc GetById (IdDto) returns (IProductResponse);
   rpc GetManyByIds (IdsProduct) returns (IArrayProductResponse);
+  rpc GetByAlias (AliasDto) returns (IProductResponse);
   rpc GetManyByAlias (AliasDto) returns (IArrayProductResponse);
 }
 
