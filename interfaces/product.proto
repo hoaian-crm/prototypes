@@ -4,9 +4,11 @@ package product;
 
 service IProductController {
   rpc GetById (IdDto) returns (IProductResponse);
-  rpc GetManyByIds (IdsProduct) returns (IArrayProductResponse);
+  rpc GetManyByIds (IdsDto) returns (IArrayProductResponse);
   rpc GetByAlias (AliasDto) returns (IProductResponse);
   rpc GetManyByAlias (AliasDto) returns (IArrayProductResponse);
+
+  rpc UpdateTotalWhenBuild(AliasUpdateProduct) returns (IProductResponse);
 }
 
 message IdDto{
@@ -14,11 +16,16 @@ message IdDto{
 }
 
 message IdsDto{
-  int64 id = 1;
+  repeated int64 id = 1;
 }
 
 message AliasDto{
   repeated string alias = 1;
+}
+
+message AliasUpdateProduct{
+  string alias = 1;
+  int64 amount = 2;
 }
 
 message IProductDetail{
@@ -40,3 +47,4 @@ message IProductResponse{
 message IArrayProductResponse{
   repeated IProductResponse products = 1;
 }
+
