@@ -35,7 +35,7 @@ app.connectMicroservice<MicroserviceOptions>({
   options: {
     url: process.env.NODE_ENV !== "local" ? "0.0.0.0:50051" : "localhost:5000",
     package: ["<package_name>"],
-    protoPath: ["node_module/crm-prototypes/interfaces/<package_name>.proto"],
+    protoPath: ["node_modules/crm-prototypes/interfaces/<package_name>.proto"],
     maxReceiveMessageLength: 1024 * 1024 * 1024,
     maxSendMessageLength: 1024 * 1024 * 1024,
   },
@@ -55,11 +55,12 @@ private client: ClientGrpc;
 ```
 
 ### Type script
+
 ```ts
 // Define package
-export * as Storage from './gen/ts/interfaces/storage';
+export * as Storage from "./gen/ts/interfaces/storage";
 
-import Storage from 'crm-prototypes' // replace with your define
+import Storage from "crm-prototypes"; // replace with your define
 // Example type:
-Storage.IStorageController
+Storage.IStorageController;
 ```
