@@ -4,28 +4,99 @@ import Long = require("long");
 
 export const protobufPackage = "product";
 
-export interface GetProductDto {
+export interface IdDto {
+  id: number;
+}
+
+export interface IdsDto {
   id: number[];
 }
 
-export interface IProductDetail {
+export interface AliasDto {
+  alias: string;
+}
+
+export interface ManyAliasDto {
+  alias: string[];
+}
+
+export interface ResponseFindOne {
   id: number;
   name: string;
   alias: string;
   price: number;
+  totalSold: number;
   discount: number;
+  description: string;
 }
 
-export interface IProductResponse {
-  products: IProductDetail[];
+export interface ResponseFindMany {
+  products: ResponseFindOne[];
 }
 
-function createBaseGetProductDto(): GetProductDto {
+function createBaseIdDto(): IdDto {
+  return { id: 0 };
+}
+
+export const IdDto = {
+  encode(message: IdDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).int64(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): IdDto {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIdDto();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): IdDto {
+    return { id: isSet(object.id) ? globalThis.Number(object.id) : 0 };
+  },
+
+  toJSON(message: IdDto): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<IdDto>, I>>(base?: I): IdDto {
+    return IdDto.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<IdDto>, I>>(object: I): IdDto {
+    const message = createBaseIdDto();
+    message.id = object.id ?? 0;
+    return message;
+  },
+};
+
+function createBaseIdsDto(): IdsDto {
   return { id: [] };
 }
 
-export const GetProductDto = {
-  encode(message: GetProductDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const IdsDto = {
+  encode(message: IdsDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.id) {
       writer.int64(v);
@@ -34,10 +105,10 @@ export const GetProductDto = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetProductDto {
+  decode(input: _m0.Reader | Uint8Array, length?: number): IdsDto {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetProductDto();
+    const message = createBaseIdsDto();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -67,11 +138,11 @@ export const GetProductDto = {
     return message;
   },
 
-  fromJSON(object: any): GetProductDto {
+  fromJSON(object: any): IdsDto {
     return { id: globalThis.Array.isArray(object?.id) ? object.id.map((e: any) => globalThis.Number(e)) : [] };
   },
 
-  toJSON(message: GetProductDto): unknown {
+  toJSON(message: IdsDto): unknown {
     const obj: any = {};
     if (message.id?.length) {
       obj.id = message.id.map((e) => Math.round(e));
@@ -79,22 +150,136 @@ export const GetProductDto = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetProductDto>, I>>(base?: I): GetProductDto {
-    return GetProductDto.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<IdsDto>, I>>(base?: I): IdsDto {
+    return IdsDto.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetProductDto>, I>>(object: I): GetProductDto {
-    const message = createBaseGetProductDto();
+  fromPartial<I extends Exact<DeepPartial<IdsDto>, I>>(object: I): IdsDto {
+    const message = createBaseIdsDto();
     message.id = object.id?.map((e) => e) || [];
     return message;
   },
 };
 
-function createBaseIProductDetail(): IProductDetail {
-  return { id: 0, name: "", alias: "", price: 0, discount: 0 };
+function createBaseAliasDto(): AliasDto {
+  return { alias: "" };
 }
 
-export const IProductDetail = {
-  encode(message: IProductDetail, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const AliasDto = {
+  encode(message: AliasDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.alias !== "") {
+      writer.uint32(10).string(message.alias);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): AliasDto {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAliasDto();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.alias = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AliasDto {
+    return { alias: isSet(object.alias) ? globalThis.String(object.alias) : "" };
+  },
+
+  toJSON(message: AliasDto): unknown {
+    const obj: any = {};
+    if (message.alias !== "") {
+      obj.alias = message.alias;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AliasDto>, I>>(base?: I): AliasDto {
+    return AliasDto.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AliasDto>, I>>(object: I): AliasDto {
+    const message = createBaseAliasDto();
+    message.alias = object.alias ?? "";
+    return message;
+  },
+};
+
+function createBaseManyAliasDto(): ManyAliasDto {
+  return { alias: [] };
+}
+
+export const ManyAliasDto = {
+  encode(message: ManyAliasDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.alias) {
+      writer.uint32(10).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ManyAliasDto {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManyAliasDto();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.alias.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ManyAliasDto {
+    return { alias: globalThis.Array.isArray(object?.alias) ? object.alias.map((e: any) => globalThis.String(e)) : [] };
+  },
+
+  toJSON(message: ManyAliasDto): unknown {
+    const obj: any = {};
+    if (message.alias?.length) {
+      obj.alias = message.alias;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ManyAliasDto>, I>>(base?: I): ManyAliasDto {
+    return ManyAliasDto.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ManyAliasDto>, I>>(object: I): ManyAliasDto {
+    const message = createBaseManyAliasDto();
+    message.alias = object.alias?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseResponseFindOne(): ResponseFindOne {
+  return { id: 0, name: "", alias: "", price: 0, totalSold: 0, discount: 0, description: "" };
+}
+
+export const ResponseFindOne = {
+  encode(message: ResponseFindOne, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== 0) {
       writer.uint32(8).int64(message.id);
     }
@@ -107,16 +292,22 @@ export const IProductDetail = {
     if (message.price !== 0) {
       writer.uint32(32).int64(message.price);
     }
+    if (message.totalSold !== 0) {
+      writer.uint32(40).int64(message.totalSold);
+    }
     if (message.discount !== 0) {
-      writer.uint32(40).int64(message.discount);
+      writer.uint32(48).int64(message.discount);
+    }
+    if (message.description !== "") {
+      writer.uint32(58).string(message.description);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): IProductDetail {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ResponseFindOne {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseIProductDetail();
+    const message = createBaseResponseFindOne();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -153,7 +344,21 @@ export const IProductDetail = {
             break;
           }
 
+          message.totalSold = longToNumber(reader.int64() as Long);
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
           message.discount = longToNumber(reader.int64() as Long);
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.description = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -164,17 +369,19 @@ export const IProductDetail = {
     return message;
   },
 
-  fromJSON(object: any): IProductDetail {
+  fromJSON(object: any): ResponseFindOne {
     return {
       id: isSet(object.id) ? globalThis.Number(object.id) : 0,
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       alias: isSet(object.alias) ? globalThis.String(object.alias) : "",
       price: isSet(object.price) ? globalThis.Number(object.price) : 0,
+      totalSold: isSet(object.totalSold) ? globalThis.Number(object.totalSold) : 0,
       discount: isSet(object.discount) ? globalThis.Number(object.discount) : 0,
+      description: isSet(object.description) ? globalThis.String(object.description) : "",
     };
   },
 
-  toJSON(message: IProductDetail): unknown {
+  toJSON(message: ResponseFindOne): unknown {
     const obj: any = {};
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
@@ -188,42 +395,50 @@ export const IProductDetail = {
     if (message.price !== 0) {
       obj.price = Math.round(message.price);
     }
+    if (message.totalSold !== 0) {
+      obj.totalSold = Math.round(message.totalSold);
+    }
     if (message.discount !== 0) {
       obj.discount = Math.round(message.discount);
+    }
+    if (message.description !== "") {
+      obj.description = message.description;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<IProductDetail>, I>>(base?: I): IProductDetail {
-    return IProductDetail.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ResponseFindOne>, I>>(base?: I): ResponseFindOne {
+    return ResponseFindOne.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<IProductDetail>, I>>(object: I): IProductDetail {
-    const message = createBaseIProductDetail();
+  fromPartial<I extends Exact<DeepPartial<ResponseFindOne>, I>>(object: I): ResponseFindOne {
+    const message = createBaseResponseFindOne();
     message.id = object.id ?? 0;
     message.name = object.name ?? "";
     message.alias = object.alias ?? "";
     message.price = object.price ?? 0;
+    message.totalSold = object.totalSold ?? 0;
     message.discount = object.discount ?? 0;
+    message.description = object.description ?? "";
     return message;
   },
 };
 
-function createBaseIProductResponse(): IProductResponse {
+function createBaseResponseFindMany(): ResponseFindMany {
   return { products: [] };
 }
 
-export const IProductResponse = {
-  encode(message: IProductResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const ResponseFindMany = {
+  encode(message: ResponseFindMany, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.products) {
-      IProductDetail.encode(v!, writer.uint32(10).fork()).ldelim();
+      ResponseFindOne.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): IProductResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ResponseFindMany {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseIProductResponse();
+    const message = createBaseResponseFindMany();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -232,7 +447,7 @@ export const IProductResponse = {
             break;
           }
 
-          message.products.push(IProductDetail.decode(reader, reader.uint32()));
+          message.products.push(ResponseFindOne.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -243,34 +458,37 @@ export const IProductResponse = {
     return message;
   },
 
-  fromJSON(object: any): IProductResponse {
+  fromJSON(object: any): ResponseFindMany {
     return {
       products: globalThis.Array.isArray(object?.products)
-        ? object.products.map((e: any) => IProductDetail.fromJSON(e))
+        ? object.products.map((e: any) => ResponseFindOne.fromJSON(e))
         : [],
     };
   },
 
-  toJSON(message: IProductResponse): unknown {
+  toJSON(message: ResponseFindMany): unknown {
     const obj: any = {};
     if (message.products?.length) {
-      obj.products = message.products.map((e) => IProductDetail.toJSON(e));
+      obj.products = message.products.map((e) => ResponseFindOne.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<IProductResponse>, I>>(base?: I): IProductResponse {
-    return IProductResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ResponseFindMany>, I>>(base?: I): ResponseFindMany {
+    return ResponseFindMany.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<IProductResponse>, I>>(object: I): IProductResponse {
-    const message = createBaseIProductResponse();
-    message.products = object.products?.map((e) => IProductDetail.fromPartial(e)) || [];
+  fromPartial<I extends Exact<DeepPartial<ResponseFindMany>, I>>(object: I): ResponseFindMany {
+    const message = createBaseResponseFindMany();
+    message.products = object.products?.map((e) => ResponseFindOne.fromPartial(e)) || [];
     return message;
   },
 };
 
 export interface IProductController {
-  GetById(request: GetProductDto): Promise<IProductResponse>;
+  FindOneById(request: IdDto): Promise<ResponseFindOne>;
+  FindManyByIds(request: IdsDto): Promise<ResponseFindMany>;
+  FindOneByAlias(request: AliasDto): Promise<ResponseFindOne>;
+  FindManyByAlias(request: ManyAliasDto): Promise<ResponseFindMany>;
 }
 
 export const IProductControllerServiceName = "product.IProductController";
@@ -280,12 +498,33 @@ export class IProductControllerClientImpl implements IProductController {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || IProductControllerServiceName;
     this.rpc = rpc;
-    this.GetById = this.GetById.bind(this);
+    this.FindOneById = this.FindOneById.bind(this);
+    this.FindManyByIds = this.FindManyByIds.bind(this);
+    this.FindOneByAlias = this.FindOneByAlias.bind(this);
+    this.FindManyByAlias = this.FindManyByAlias.bind(this);
   }
-  GetById(request: GetProductDto): Promise<IProductResponse> {
-    const data = GetProductDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "GetById", data);
-    return promise.then((data) => IProductResponse.decode(_m0.Reader.create(data)));
+  FindOneById(request: IdDto): Promise<ResponseFindOne> {
+    const data = IdDto.encode(request).finish();
+    const promise = this.rpc.request(this.service, "FindOneById", data);
+    return promise.then((data) => ResponseFindOne.decode(_m0.Reader.create(data)));
+  }
+
+  FindManyByIds(request: IdsDto): Promise<ResponseFindMany> {
+    const data = IdsDto.encode(request).finish();
+    const promise = this.rpc.request(this.service, "FindManyByIds", data);
+    return promise.then((data) => ResponseFindMany.decode(_m0.Reader.create(data)));
+  }
+
+  FindOneByAlias(request: AliasDto): Promise<ResponseFindOne> {
+    const data = AliasDto.encode(request).finish();
+    const promise = this.rpc.request(this.service, "FindOneByAlias", data);
+    return promise.then((data) => ResponseFindOne.decode(_m0.Reader.create(data)));
+  }
+
+  FindManyByAlias(request: ManyAliasDto): Promise<ResponseFindMany> {
+    const data = ManyAliasDto.encode(request).finish();
+    const promise = this.rpc.request(this.service, "FindManyByAlias", data);
+    return promise.then((data) => ResponseFindMany.decode(_m0.Reader.create(data)));
   }
 }
 

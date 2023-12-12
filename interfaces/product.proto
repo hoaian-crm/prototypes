@@ -3,12 +3,11 @@ syntax = "proto3";
 package product;
 
 service IProductController {
-  rpc GetById (IdDto) returns (IProductResponse);
-  rpc GetManyByIds (IdsDto) returns (IArrayProductResponse);
-  rpc GetByAlias (AliasDto) returns (IProductResponse);
-  rpc GetManyByAlias (AliasDto) returns (IArrayProductResponse);
+  rpc FindOneById (IdDto) returns (ResponseFindOne);
+  rpc FindManyByIds (IdsDto) returns (ResponseFindMany);
 
-  rpc UpdateTotalWhenBuild(AliasUpdateProduct) returns (IProductResponse);
+  rpc FindOneByAlias (AliasDto) returns (ResponseFindOne);
+  rpc FindManyByAlias (ManyAliasDto) returns (ResponseFindMany);
 }
 
 message IdDto{
@@ -16,35 +15,27 @@ message IdDto{
 }
 
 message IdsDto{
-  repeated int64 id = 1;
+ repeated int64 id = 1;
 }
 
 message AliasDto{
+  string alias = 1;
+}
+
+message ManyAliasDto{
   repeated string alias = 1;
 }
 
-message AliasUpdateProduct{
-  string alias = 1;
-  int64 amount = 2;
-}
-
-message IProductDetail{
+message ResponseFindOne{
   int64 id =  1;
   string name = 2;
   string alias = 3;
   int64 price = 4;
-  int64 discount = 5;
+  int64 total_sold = 5;
+  int64 discount = 6;
+  string description = 7;
 }
 
-message IProductResponse{
-  int64 id =  1;
-  string name = 2;
-  string alias = 3;
-  int64 price = 4;
-  int64 discount = 5;
+message ResponseFindMany{
+  repeated ResponseFindOne products =1;
 }
-
-message IArrayProductResponse{
-  repeated IProductResponse products = 1;
-}
-
