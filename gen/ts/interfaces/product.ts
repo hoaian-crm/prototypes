@@ -9,7 +9,7 @@ export interface IdDto {
 }
 
 export interface dtoUpdateAmount {
-  id: number;
+  alias: string;
   amount: number;
 }
 
@@ -97,13 +97,13 @@ export const IdDto = {
 };
 
 function createBasedtoUpdateAmount(): dtoUpdateAmount {
-  return { id: 0, amount: 0 };
+  return { alias: "", amount: 0 };
 }
 
 export const dtoUpdateAmount = {
   encode(message: dtoUpdateAmount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== 0) {
-      writer.uint32(8).int64(message.id);
+    if (message.alias !== "") {
+      writer.uint32(10).string(message.alias);
     }
     if (message.amount !== 0) {
       writer.uint32(16).int64(message.amount);
@@ -119,11 +119,11 @@ export const dtoUpdateAmount = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.id = longToNumber(reader.int64() as Long);
+          message.alias = reader.string();
           continue;
         case 2:
           if (tag !== 16) {
@@ -143,15 +143,15 @@ export const dtoUpdateAmount = {
 
   fromJSON(object: any): dtoUpdateAmount {
     return {
-      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      alias: isSet(object.alias) ? globalThis.String(object.alias) : "",
       amount: isSet(object.amount) ? globalThis.Number(object.amount) : 0,
     };
   },
 
   toJSON(message: dtoUpdateAmount): unknown {
     const obj: any = {};
-    if (message.id !== 0) {
-      obj.id = Math.round(message.id);
+    if (message.alias !== "") {
+      obj.alias = message.alias;
     }
     if (message.amount !== 0) {
       obj.amount = Math.round(message.amount);
@@ -164,7 +164,7 @@ export const dtoUpdateAmount = {
   },
   fromPartial<I extends Exact<DeepPartial<dtoUpdateAmount>, I>>(object: I): dtoUpdateAmount {
     const message = createBasedtoUpdateAmount();
-    message.id = object.id ?? 0;
+    message.alias = object.alias ?? "";
     message.amount = object.amount ?? 0;
     return message;
   },
