@@ -8,8 +8,13 @@ export interface IdDto {
   id: number;
 }
 
+export interface dtoUpdateAmount {
+  id: number;
+  amount: number;
+}
+
 export interface IdsDto {
-  id: number[];
+  ids: number[];
 }
 
 export interface AliasDto {
@@ -17,7 +22,7 @@ export interface AliasDto {
 }
 
 export interface ManyAliasDto {
-  alias: string[];
+  aliases: string[];
 }
 
 export interface ResponseFindOne {
@@ -91,14 +96,88 @@ export const IdDto = {
   },
 };
 
+function createBasedtoUpdateAmount(): dtoUpdateAmount {
+  return { id: 0, amount: 0 };
+}
+
+export const dtoUpdateAmount = {
+  encode(message: dtoUpdateAmount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).int64(message.id);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(16).int64(message.amount);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): dtoUpdateAmount {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasedtoUpdateAmount();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = longToNumber(reader.int64() as Long);
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.amount = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): dtoUpdateAmount {
+    return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      amount: isSet(object.amount) ? globalThis.Number(object.amount) : 0,
+    };
+  },
+
+  toJSON(message: dtoUpdateAmount): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.amount !== 0) {
+      obj.amount = Math.round(message.amount);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<dtoUpdateAmount>, I>>(base?: I): dtoUpdateAmount {
+    return dtoUpdateAmount.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<dtoUpdateAmount>, I>>(object: I): dtoUpdateAmount {
+    const message = createBasedtoUpdateAmount();
+    message.id = object.id ?? 0;
+    message.amount = object.amount ?? 0;
+    return message;
+  },
+};
+
 function createBaseIdsDto(): IdsDto {
-  return { id: [] };
+  return { ids: [] };
 }
 
 export const IdsDto = {
   encode(message: IdsDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     writer.uint32(10).fork();
-    for (const v of message.id) {
+    for (const v of message.ids) {
       writer.int64(v);
     }
     writer.ldelim();
@@ -114,7 +193,7 @@ export const IdsDto = {
       switch (tag >>> 3) {
         case 1:
           if (tag === 8) {
-            message.id.push(longToNumber(reader.int64() as Long));
+            message.ids.push(longToNumber(reader.int64() as Long));
 
             continue;
           }
@@ -122,7 +201,7 @@ export const IdsDto = {
           if (tag === 10) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.id.push(longToNumber(reader.int64() as Long));
+              message.ids.push(longToNumber(reader.int64() as Long));
             }
 
             continue;
@@ -139,13 +218,13 @@ export const IdsDto = {
   },
 
   fromJSON(object: any): IdsDto {
-    return { id: globalThis.Array.isArray(object?.id) ? object.id.map((e: any) => globalThis.Number(e)) : [] };
+    return { ids: globalThis.Array.isArray(object?.ids) ? object.ids.map((e: any) => globalThis.Number(e)) : [] };
   },
 
   toJSON(message: IdsDto): unknown {
     const obj: any = {};
-    if (message.id?.length) {
-      obj.id = message.id.map((e) => Math.round(e));
+    if (message.ids?.length) {
+      obj.ids = message.ids.map((e) => Math.round(e));
     }
     return obj;
   },
@@ -155,7 +234,7 @@ export const IdsDto = {
   },
   fromPartial<I extends Exact<DeepPartial<IdsDto>, I>>(object: I): IdsDto {
     const message = createBaseIdsDto();
-    message.id = object.id?.map((e) => e) || [];
+    message.ids = object.ids?.map((e) => e) || [];
     return message;
   },
 };
@@ -218,12 +297,12 @@ export const AliasDto = {
 };
 
 function createBaseManyAliasDto(): ManyAliasDto {
-  return { alias: [] };
+  return { aliases: [] };
 }
 
 export const ManyAliasDto = {
   encode(message: ManyAliasDto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.alias) {
+    for (const v of message.aliases) {
       writer.uint32(10).string(v!);
     }
     return writer;
@@ -241,7 +320,7 @@ export const ManyAliasDto = {
             break;
           }
 
-          message.alias.push(reader.string());
+          message.aliases.push(reader.string());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -253,13 +332,15 @@ export const ManyAliasDto = {
   },
 
   fromJSON(object: any): ManyAliasDto {
-    return { alias: globalThis.Array.isArray(object?.alias) ? object.alias.map((e: any) => globalThis.String(e)) : [] };
+    return {
+      aliases: globalThis.Array.isArray(object?.aliases) ? object.aliases.map((e: any) => globalThis.String(e)) : [],
+    };
   },
 
   toJSON(message: ManyAliasDto): unknown {
     const obj: any = {};
-    if (message.alias?.length) {
-      obj.alias = message.alias;
+    if (message.aliases?.length) {
+      obj.aliases = message.aliases;
     }
     return obj;
   },
@@ -269,7 +350,7 @@ export const ManyAliasDto = {
   },
   fromPartial<I extends Exact<DeepPartial<ManyAliasDto>, I>>(object: I): ManyAliasDto {
     const message = createBaseManyAliasDto();
-    message.alias = object.alias?.map((e) => e) || [];
+    message.aliases = object.aliases?.map((e) => e) || [];
     return message;
   },
 };
@@ -485,10 +566,12 @@ export const ResponseFindMany = {
 };
 
 export interface IProductController {
-  FindOneById(request: IdDto): Promise<ResponseFindOne>;
-  FindManyByIds(request: IdsDto): Promise<ResponseFindMany>;
-  FindOneByAlias(request: AliasDto): Promise<ResponseFindOne>;
-  FindManyByAlias(request: ManyAliasDto): Promise<ResponseFindMany>;
+  findOneById(request: IdDto): Promise<ResponseFindOne>;
+  findManyByIds(request: IdsDto): Promise<ResponseFindMany>;
+  findOneByAlias(request: AliasDto): Promise<ResponseFindOne>;
+  findManyByAlias(request: ManyAliasDto): Promise<ResponseFindMany>;
+  incrementProduct(request: dtoUpdateAmount): Promise<ResponseFindOne>;
+  descrementProduct(request: dtoUpdateAmount): Promise<ResponseFindOne>;
 }
 
 export const IProductControllerServiceName = "product.IProductController";
@@ -498,33 +581,47 @@ export class IProductControllerClientImpl implements IProductController {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || IProductControllerServiceName;
     this.rpc = rpc;
-    this.FindOneById = this.FindOneById.bind(this);
-    this.FindManyByIds = this.FindManyByIds.bind(this);
-    this.FindOneByAlias = this.FindOneByAlias.bind(this);
-    this.FindManyByAlias = this.FindManyByAlias.bind(this);
+    this.findOneById = this.findOneById.bind(this);
+    this.findManyByIds = this.findManyByIds.bind(this);
+    this.findOneByAlias = this.findOneByAlias.bind(this);
+    this.findManyByAlias = this.findManyByAlias.bind(this);
+    this.incrementProduct = this.incrementProduct.bind(this);
+    this.descrementProduct = this.descrementProduct.bind(this);
   }
-  FindOneById(request: IdDto): Promise<ResponseFindOne> {
+  findOneById(request: IdDto): Promise<ResponseFindOne> {
     const data = IdDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "FindOneById", data);
+    const promise = this.rpc.request(this.service, "findOneById", data);
     return promise.then((data) => ResponseFindOne.decode(_m0.Reader.create(data)));
   }
 
-  FindManyByIds(request: IdsDto): Promise<ResponseFindMany> {
+  findManyByIds(request: IdsDto): Promise<ResponseFindMany> {
     const data = IdsDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "FindManyByIds", data);
+    const promise = this.rpc.request(this.service, "findManyByIds", data);
     return promise.then((data) => ResponseFindMany.decode(_m0.Reader.create(data)));
   }
 
-  FindOneByAlias(request: AliasDto): Promise<ResponseFindOne> {
+  findOneByAlias(request: AliasDto): Promise<ResponseFindOne> {
     const data = AliasDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "FindOneByAlias", data);
+    const promise = this.rpc.request(this.service, "findOneByAlias", data);
     return promise.then((data) => ResponseFindOne.decode(_m0.Reader.create(data)));
   }
 
-  FindManyByAlias(request: ManyAliasDto): Promise<ResponseFindMany> {
+  findManyByAlias(request: ManyAliasDto): Promise<ResponseFindMany> {
     const data = ManyAliasDto.encode(request).finish();
-    const promise = this.rpc.request(this.service, "FindManyByAlias", data);
+    const promise = this.rpc.request(this.service, "findManyByAlias", data);
     return promise.then((data) => ResponseFindMany.decode(_m0.Reader.create(data)));
+  }
+
+  incrementProduct(request: dtoUpdateAmount): Promise<ResponseFindOne> {
+    const data = dtoUpdateAmount.encode(request).finish();
+    const promise = this.rpc.request(this.service, "incrementProduct", data);
+    return promise.then((data) => ResponseFindOne.decode(_m0.Reader.create(data)));
+  }
+
+  descrementProduct(request: dtoUpdateAmount): Promise<ResponseFindOne> {
+    const data = dtoUpdateAmount.encode(request).finish();
+    const promise = this.rpc.request(this.service, "descrementProduct", data);
+    return promise.then((data) => ResponseFindOne.decode(_m0.Reader.create(data)));
   }
 }
 

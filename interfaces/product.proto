@@ -3,19 +3,27 @@ syntax = "proto3";
 package product;
 
 service IProductController {
-  rpc FindOneById (IdDto) returns (ResponseFindOne);
-  rpc FindManyByIds (IdsDto) returns (ResponseFindMany);
+  rpc findOneById (IdDto) returns (ResponseFindOne);
+  rpc findManyByIds (IdsDto) returns (ResponseFindMany);
 
-  rpc FindOneByAlias (AliasDto) returns (ResponseFindOne);
-  rpc FindManyByAlias (ManyAliasDto) returns (ResponseFindMany);
+  rpc findOneByAlias (AliasDto) returns (ResponseFindOne);
+  rpc findManyByAlias (ManyAliasDto) returns (ResponseFindMany);
+
+  rpc incrementProduct (dtoUpdateAmount) returns (ResponseFindOne);
+  rpc descrementProduct (dtoUpdateAmount) returns (ResponseFindOne);
 }
 
 message IdDto{
   int64 id = 1;
 }
 
+message dtoUpdateAmount{
+  int64 id = 1;
+  int64 amount = 2;
+}
+
 message IdsDto{
- repeated int64 id = 1;
+  repeated int64 ids = 1;
 }
 
 message AliasDto{
@@ -23,7 +31,7 @@ message AliasDto{
 }
 
 message ManyAliasDto{
-  repeated string alias = 1;
+  repeated string aliases = 1;
 }
 
 message ResponseFindOne{
