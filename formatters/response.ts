@@ -31,6 +31,16 @@ export class Response<T extends any> {
     };
   }
 
+  static getSuccess<T extends any>(result: T): Response<T>  {
+    return {
+      messages: [Messages.getSuccess],
+      data: {
+        result,
+        total: 1
+      }
+    }
+  }
+
   static createSuccess<T extends any>(result: T) {
     return {
       messages: [Messages.createSuccess],
