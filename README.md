@@ -1,12 +1,5 @@
 ## Prototypes for workflow
 
-- Package name: crm-prototypes
-- Install:
-
-```bash
-yarn add crm-prototypes
-```
-
 #### Build protobuf to ts:
 
 ```bash
