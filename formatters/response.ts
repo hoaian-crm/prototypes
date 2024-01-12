@@ -2,7 +2,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { Messages } from './messages';
 
-export type IMessage = {
+export class IMessage {
   code: number;
   description?: string;
   field?: string;
@@ -31,7 +31,7 @@ export class Response<T extends any> {
     };
   }
 
-  static getSuccess<T extends any>(result: T): Response<T>  {
+  static getSuccess<T extends any>(result: T): Response<T> {
     return {
       messages: [Messages.getSuccess],
       data: {
