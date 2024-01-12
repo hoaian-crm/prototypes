@@ -3,7 +3,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Messages } from './messages';
 
 export class IMessage {
-  code: number;
+  code: number | number;
   description?: string;
   field?: string;
   metaData?: string;
