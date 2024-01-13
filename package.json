@@ -1,5 +1,5 @@
 {
-  "name": "@hoaian-crm/prototypes",
+  "name": "@relationc/prototypes",
   "version": "1.1.8",
   "description": "Prototype package for project",
   "author": {
@@ -11,7 +11,7 @@
     "url": "https://github.com/hoaian-crm/prototypes.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/hoaian-crm"
+    "registry": "https://registry.npmjs.org"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,6 @@
     "build": "tsc"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "protobufjs": "^7.2.5",
